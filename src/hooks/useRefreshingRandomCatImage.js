@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import useImage from './useImage';
 import catAPIRequest from '../utils/catAPIRequest';
 
-export const fetchCat = async (category) => {
+export const fetchCat = async category => {
 	const baseUrl = 'https://api.thecatapi.com/v1/images/search?size=full';
-	const fetchUrl = category ? `${ baseUrl }&category_ids=${ category }` : baseUrl;
+	const fetchUrl = category && category.value ? `${ baseUrl }&category_ids=${ category.value }` : baseUrl;
 
 	return await catAPIRequest(fetchUrl);
 };
@@ -17,7 +17,7 @@ function useRefreshingRandomCatImage(refreshRate, category) {
 		() => {
 			fetchCat(category).then(result => setRandomCat(result[0]));
 		},
-		[category],
+		[ category ],
 	);
 
 	useEffect(() => {
