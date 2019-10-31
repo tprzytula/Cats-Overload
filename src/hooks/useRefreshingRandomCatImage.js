@@ -25,19 +25,20 @@ function useRefreshingRandomCatImage(refreshRate, category) {
 	}, [ memoizedFetchCat ]);
 
 	useEffect(() => {
-		let timeout;
+		if (!catImage) return;
+
+		const timeout = setTimeout(memoizedFetchCat, refreshRate);
+
+		return () => { clearTimeout(timeout) }
+	}, [ refreshRate, memoizedFetchCat, catImage ]);
+
+	useEffect(() => {
 		const newImageFinishedLoading = status === 'loaded';
 
 		if (newImageFinishedLoading) {
 			setCatImage(image);
-
-			if (refreshRate) {
-				timeout = setTimeout(memoizedFetchCat, refreshRate);
-			}
 		}
-
-		return () => { clearTimeout(timeout) }
-	}, [ status, refreshRate, image, category, memoizedFetchCat ]);
+	}, [ status, image, memoizedFetchCat ]);
 
 	return [ catImage ];
 }
