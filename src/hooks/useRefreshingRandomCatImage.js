@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import useImage from './useImage';
 import catAPIRequest from '../utils/catAPIRequest';
 
@@ -13,18 +13,16 @@ function useRefreshingRandomCatImage(refreshRate, category) {
 	const [ catImage, setCatImage ] = useState(null);
 	const [ randomCat, setRandomCat ] = useState({ url: null });
 	const [ image, status ] = useImage(randomCat.url);
-
-	const refreshCat = () => {
-		fetchCat(category).then(result => setRandomCat(result[0]));
-	};
+	const memoizedFetchCat = useCallback(
+		() => {
+			fetchCat(category).then(result => setRandomCat(result[0]));
+		},
+		[category],
+	);
 
 	useEffect(() => {
-		const initialLoad = catImage === null;
-
-		if (initialLoad) {
-			refreshCat();
-		}
-	});
+		memoizedFetchCat();
+	}, [ memoizedFetchCat ]);
 
 	useEffect(() => {
 		let timeout;
@@ -34,12 +32,12 @@ function useRefreshingRandomCatImage(refreshRate, category) {
 			setCatImage(image);
 
 			if (refreshRate) {
-				timeout = setTimeout(refreshCat, refreshRate);
+				timeout = setTimeout(memoizedFetchCat, refreshRate);
 			}
 		}
 
 		return () => { clearTimeout(timeout) }
-	}, [ status, refreshRate, image, category ]);
+	}, [ status, refreshRate, image, category, memoizedFetchCat ]);
 
 	return [ catImage ];
 }
