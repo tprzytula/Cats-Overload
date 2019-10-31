@@ -1,7 +1,9 @@
 import { API_KEY } from '../config/config';
 
-const catAPIRequest = async url => {
-	const response = await fetch(url, {
+const baseUrl = 'https://api.thecatapi.com/v1';
+
+export const catAPIRequest = async endpoint => {
+	const response = await fetch(`${ baseUrl }/${ endpoint }`, {
 		method: 'GET',
 		headers: {
 			'x-api-key': API_KEY
@@ -11,4 +13,10 @@ const catAPIRequest = async url => {
 	return await response.json();
 };
 
-export default catAPIRequest;
+export const fetchCat = async (category = '') => {
+	return await catAPIRequest(`images/search?size=full&category_ids=${ category }`);
+};
+
+export const fetchCatCategories = async () => {
+	return await catAPIRequest('categories');
+};

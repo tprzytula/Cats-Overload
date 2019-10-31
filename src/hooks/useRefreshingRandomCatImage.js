@@ -1,23 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import useImage from './useImage';
-import catAPIRequest from '../utils/catAPIRequest';
+import { fetchCat } from '../utils/catAPIRequest';
 
-export const fetchCat = async category => {
-	const baseUrl = 'https://api.thecatapi.com/v1/images/search?size=full';
-	const fetchUrl = category && category.value ? `${ baseUrl }&category_ids=${ category.value }` : baseUrl;
-
-	return await catAPIRequest(fetchUrl);
-};
-
-function useRefreshingRandomCatImage(refreshRate, category) {
+function useRefreshingRandomCatImage(refreshRate, selectedCategory) {
 	const [ catImage, setCatImage ] = useState(null);
 	const [ randomCat, setRandomCat ] = useState({ url: null });
 	const [ image, status ] = useImage(randomCat.url);
 	const memoizedFetchCat = useCallback(
 		() => {
-			fetchCat(category).then(result => setRandomCat(result[0]));
+			fetchCat(selectedCategory?.value).then(result => setRandomCat(result[0]));
 		},
-		[ category ],
+		[ selectedCategory ],
 	);
 
 	useEffect(() => {
