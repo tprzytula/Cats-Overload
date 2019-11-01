@@ -24,6 +24,7 @@ function App() {
                 className="test"
                 options={ categories }
                 onChange = { setSelectedCategory }
+                isClearable
             />
             <header className="App-header">
                 <Cat category={ selectedCategory } />
