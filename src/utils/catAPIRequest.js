@@ -14,7 +14,9 @@ export const catAPIRequest = async endpoint => {
 };
 
 export const fetchCat = async (category = '') => {
-	return await catAPIRequest(`images/search?size=full&category_ids=${ category }`);
+	const [ cat ] = await catAPIRequest(`images/search?size=full&category_ids=${ category }`);
+
+	return cat;
 };
 
 export const fetchCatCategories = async () => {

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 
-function useImage(url) {
-	const [ imageDetails, setImageDetails ] = useState({ image: null, status: 'loading' });
+function usePreloadImage(image) {
+	const url = image?.url;
+	const [ status, setStatus ] = useState('loading');
 
 	useEffect(() => {
 		if (!url) return;
@@ -9,11 +10,11 @@ function useImage(url) {
 		const img = document.createElement('img');
 
 		function onload() {
-			setImageDetails({ image: img, status: 'loaded' });
+			setStatus('loaded');
 		}
 
 		function onerror() {
-			setImageDetails({ image: undefined, status: 'failed' });
+			setStatus('failed');
 		}
 
 		img.addEventListener('load', onload);
@@ -24,11 +25,11 @@ function useImage(url) {
 		return function cleanup() {
 			img.removeEventListener('load', onload);
 			img.removeEventListener('error', onerror);
-			setImageDetails({ image: null, status: 'loading' });
+			setStatus('loading');
 		};
-	}, [url]);
+	}, [ url ]);
 
-	return [ imageDetails.image, imageDetails.status ];
+	return [ status ];
 }
 
-export default useImage;
+export default usePreloadImage;

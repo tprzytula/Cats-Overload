@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import useRefreshingRandomCatImage from './hooks/useRefreshingRandomCatImage';
+import useChangingCatImage from './hooks/useChangingCatImage';
 
 const StyledImage = styled.img`
 	max-height: 100vh;
@@ -8,13 +8,13 @@ const StyledImage = styled.img`
 `;
 
 function Cat({ category }) {
-	const [ image ] = useRefreshingRandomCatImage(60000, category);
+	const [ image ] = useChangingCatImage(10000, category);
 
 	if (!image) {
 		return <span>Loading ...</span>;
 	}
 
-	return <StyledImage src={ image.src } className="Cat" alt="cat"/>
+	return <StyledImage src={ image.url } className="Cat" alt="cat"/>
 }
 
 export default Cat;

@@ -30,7 +30,7 @@ const StyledContent = styled.div`
 `;
 
 function App() {
-    const [ selectedCategory, setSelectedCategory ] = useState({});
+    const [ selectedCategory, setSelectedCategory ] = useState( {});
     const [ categories, setCategories ] = useState([]);
 
     useLayoutEffect(() => {
@@ -42,12 +42,12 @@ function App() {
             <StyledControls>
                 <Select
                     options={ categories }
-                    onChange = { setSelectedCategory }
+                    onChange ={ setSelectedCategory }
                     isClearable
                 />
             </StyledControls>
             <StyledContent>
-                <Cat category={ selectedCategory } />
+                <Cat category={ selectedCategory.value } />
             </StyledContent>
         </StyledContainer>
     );
