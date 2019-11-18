@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import { ICatImage } from '../types/theCatApi';
 
-function usePreloadImage(image) {
-	const url = image?.url;
+function usePreloadImage(image: ICatImage | undefined) {
+	const imageUrl = image?.url;
 	const [ status, setStatus ] = useState('loading');
 
 	useEffect(() => {
-		if (!url) return;
+		if (!imageUrl) return;
 
 		const img = document.createElement('img');
 
@@ -20,14 +21,14 @@ function usePreloadImage(image) {
 		img.addEventListener('load', onload);
 		img.addEventListener('error', onerror);
 
-		img.src = url;
+		img.src = imageUrl;
 
 		return function cleanup() {
 			img.removeEventListener('load', onload);
 			img.removeEventListener('error', onerror);
 			setStatus('loading');
 		};
-	}, [ url ]);
+	}, [ imageUrl ]);
 
 	return [ status ];
 }

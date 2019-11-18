@@ -3,10 +3,17 @@ import ChangingCatImage from './components/ChangingCatImage';
 import { fetchCatCategories } from './utils/catAPIRequest';
 import Select from 'react-select';
 import styled from 'styled-components';
-import { INTERVAL } from './config/config';
+import { INTERVAL } from './config/config.json';
+import { ValueType } from 'react-select';
+import { ICategoryResponse } from './types/theCatApi';
 
-const getCategories = async () => {
-    const response = await fetchCatCategories();
+interface Category {
+    value: number,
+    label: string
+}
+
+const getCategories = async (): Promise<Category[]> => {
+    const response: Array<ICategoryResponse> = await fetchCatCategories();
 
     return response.map(({ id, name }) => ({ value: id, label: name }));
 };
@@ -30,9 +37,11 @@ const StyledContent = styled.div`
     color: white;
 `;
 
+const IMAGE_INTERVAL: number = parseInt(INTERVAL, 10);
+
 function App() {
-    const [ selectedCategory, setSelectedCategory ] = useState( {});
-    const [ categories, setCategories ] = useState([]);
+    const [ selectedCategory, setSelectedCategory ] = useState<Category | null>( null);
+    const [ categories, setCategories ] = useState<Category[]>([]);
 
     useLayoutEffect(() => {
         getCategories().then(result => setCategories(result));
@@ -43,12 +52,17 @@ function App() {
             <StyledControls>
                 <Select
                     options={ categories }
-                    onChange ={ setSelectedCategory }
+                    onChange={(category: ValueType<Category>): void => {
+                        setSelectedCategory(category as Category)
+                    }}
                     isClearable
                 />
             </StyledControls>
             <StyledContent>
-                <ChangingCatImage category={ selectedCategory.value } interval={ INTERVAL }/>
+                <ChangingCatImage
+                    category={ selectedCategory?.value }
+                    interval={ IMAGE_INTERVAL }
+                />
             </StyledContent>
         </StyledContainer>
     );
