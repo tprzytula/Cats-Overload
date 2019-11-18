@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
-import Cat from './Cat';
+import ChangingCatImage from './components/ChangingCatImage';
 import { fetchCatCategories } from './utils/catAPIRequest';
 import Select from 'react-select';
 import styled from 'styled-components';
@@ -48,7 +48,7 @@ function App() {
                 />
             </StyledControls>
             <StyledContent>
-                <Cat category={ selectedCategory.value } interval={ INTERVAL }/>
+                <ChangingCatImage category={ selectedCategory.value } interval={ INTERVAL }/>
             </StyledContent>
         </StyledContainer>
     );
