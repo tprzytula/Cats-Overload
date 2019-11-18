@@ -7,8 +7,8 @@ const StyledImage = styled.img`
 	max-width: 100vw;
 `;
 
-function Cat({ category }) {
-	const [ image ] = useChangingCatImage(10000, category);
+function Cat({ category, interval }) {
+	const [ image ] = useChangingCatImage(interval, category);
 
 	if (!image) {
 		return <span>Loading ...</span>;

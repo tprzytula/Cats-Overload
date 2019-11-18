@@ -3,6 +3,7 @@ import Cat from './Cat';
 import { fetchCatCategories } from './utils/catAPIRequest';
 import Select from 'react-select';
 import styled from 'styled-components';
+import { INTERVAL } from './config/config';
 
 const getCategories = async () => {
     const response = await fetchCatCategories();
@@ -47,7 +48,7 @@ function App() {
                 />
             </StyledControls>
             <StyledContent>
-                <Cat category={ selectedCategory.value } />
+                <Cat category={ selectedCategory.value } interval={ INTERVAL }/>
             </StyledContent>
         </StyledContainer>
     );
