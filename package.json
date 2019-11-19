@@ -17,7 +17,8 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.* --fix"
+    "lint": "eslint src/**/*.*",
+    "lint:fix": "eslint src/**/*.* --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
