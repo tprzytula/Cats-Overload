@@ -5,7 +5,7 @@ import Select from 'react-select';
 import styled from 'styled-components';
 import { INTERVAL } from './config/config.json';
 import { ValueType } from 'react-select';
-import { ICategoryResponse } from './types/theCatApi';
+import { CategoryResponse } from './types/theCatApi';
 
 interface Category {
     value: number,
@@ -13,7 +13,7 @@ interface Category {
 }
 
 const getCategories = async (): Promise<Category[]> => {
-    const response: Array<ICategoryResponse> = await fetchCatCategories();
+    const response: Array<CategoryResponse> = await fetchCatCategories();
 
     return response.map(({ id, name }) => ({ value: id, label: name }));
 };

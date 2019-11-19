@@ -1,36 +1,36 @@
 import { useState, useEffect } from 'react';
-import { ICatImage } from '../types/theCatApi';
+import { CatImage } from '../types/theCatApi';
 
-function usePreloadImage(image: ICatImage | undefined) {
-	const imageUrl = image?.url;
-	const [ status, setStatus ] = useState('loading');
+function usePreloadImage(image: CatImage | undefined): [string] {
+    const imageUrl = image?.url;
+    const [status, setStatus] = useState<string>('loading');
 
-	useEffect(() => {
-		if (!imageUrl) return;
+    useEffect(() => {
+        if (!imageUrl) return;
 
-		const img = document.createElement('img');
+        const img: HTMLImageElement = document.createElement('img');
 
-		function onload() {
-			setStatus('loaded');
-		}
+        function onload(): void {
+            setStatus('loaded');
+        }
 
-		function onerror() {
-			setStatus('failed');
-		}
+        function onerror(): void {
+            setStatus('failed');
+        }
 
-		img.addEventListener('load', onload);
-		img.addEventListener('error', onerror);
+        img.addEventListener('load', onload);
+        img.addEventListener('error', onerror);
 
-		img.src = imageUrl;
+        img.src = imageUrl;
 
-		return function cleanup() {
-			img.removeEventListener('load', onload);
-			img.removeEventListener('error', onerror);
-			setStatus('loading');
-		};
-	}, [ imageUrl ]);
+        return function cleanup(): void {
+            img.removeEventListener('load', onload);
+            img.removeEventListener('error', onerror);
+            setStatus('loading');
+        };
+    }, [imageUrl]);
 
-	return [ status ];
+    return [status];
 }
 
 export default usePreloadImage;
