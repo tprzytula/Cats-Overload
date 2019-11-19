@@ -3,18 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-image-fade-in": "^1.1.0",
     "react-scripts": "3.2.0",
     "react-select": "^3.0.8",
+    "styled-components": "^5.0.0-rc.2",
     "typescript": "^3.7.2"
   },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.* --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -35,12 +38,20 @@
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.8",
+    "@types/prop-types": "^15.7.3",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.4",
     "@types/react-select": "^3.0.8",
     "@types/styled-components": "^4.4.0",
+    "@typescript-eslint/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/parser": "^2.8.0",
     "customize-cra": "^0.8.0",
-    "react-app-rewired": "^2.1.4",
-    "styled-components": "^5.0.0-rc.2"
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "prettier": "^1.19.1",
+    "react-app-rewired": "^2.1.4"
   }
 }
