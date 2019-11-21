@@ -24,7 +24,7 @@ const ChangingCatImage: React.FC<Props> = ({ category, interval }) => {
 };
 
 ChangingCatImage.propTypes = {
-    category: PropTypes.number.isRequired,
+    category: PropTypes.number,
     interval: PropTypes.number.isRequired,
 };
 

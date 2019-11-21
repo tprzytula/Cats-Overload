@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { CatImage } from '../types/theCatApi';
 
-function usePreloadImage(image: CatImage | undefined): [string] {
+function usePreloadImage(image: CatImage | null): [string] {
     const imageUrl = image?.url;
     const [status, setStatus] = useState<string>('loading');
 

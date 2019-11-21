@@ -10,53 +10,50 @@ enum ActionType {
 }
 
 interface State {
-    currentCat?: CatImage;
-    nextCat?: CatImage;
+    currentCat: CatImage | null;
+    nextCat: CatImage | null;
 }
 
-interface Action {
-    type: ActionType;
-    payload?: {
-        currentCat?: number;
-        catImage?: CatImage;
-    };
-}
+type Action =
+    | { type: ActionType.CategoryChanged }
+    | { type: ActionType.ImageLoaded }
+    | { type: ActionType.ImageSelected; payload: { nextCat: CatImage } };
 
 const catImageReducer: React.Reducer<State, Action> = (state, action) => {
     switch (action.type) {
         case ActionType.CategoryChanged: {
             return {
-                currentCat: undefined,
-                nextCat: undefined,
+                currentCat: null,
+                nextCat: null,
             };
         }
         case ActionType.ImageSelected: {
             return {
-                currentCat: undefined,
-                nextCat: action?.payload?.catImage,
+                ...state,
+                nextCat: action.payload.nextCat,
             };
         }
         case ActionType.ImageLoaded: {
             return {
                 currentCat: state.nextCat,
-                nextCat: undefined,
+                nextCat: null,
             };
-        }
-        default: {
-            throw new Error(`Unhandled action type: ${action.type}`);
         }
     }
 };
 
-const useChangingCatImage = (refreshRate: number, catCategory: number | undefined): [CatImage | undefined] => {
-    const [{ currentCat, nextCat }, dispatch] = useReducer(catImageReducer, {});
+function useChangingCatImage(refreshRate: number, catCategory: number | undefined): [CatImage | null] {
+    const [{ currentCat, nextCat }, dispatch] = useReducer(catImageReducer, {
+        currentCat: null,
+        nextCat: null,
+    });
     const [status] = usePreloadImage(nextCat);
     const selectNextCatDetails = useCallback(() => {
-        fetchCat(catCategory).then(catImage =>
+        fetchCat(catCategory).then(result =>
             dispatch({
                 type: ActionType.ImageSelected,
                 payload: {
-                    catImage,
+                    nextCat: result,
                 },
             }),
         );
@@ -85,6 +82,6 @@ const useChangingCatImage = (refreshRate: number, catCategory: number | undefine
     }, [currentCat, refreshRate, selectNextCatDetails]);
 
     return [currentCat];
-};
+}
 
 export default useChangingCatImage;
