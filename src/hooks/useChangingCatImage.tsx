@@ -6,7 +6,7 @@ import { CatImage } from '../types/theCatApi';
 enum ActionType {
     CategoryChanged = 'CATEGORY_CHANGED',
     ImageSelected = 'IMAGE_SELECTED',
-    ImageLoaded = 'IMAGE_LOADED',
+    ChangeImage = 'CHANGE_IMAGE',
 }
 
 interface State {
@@ -16,7 +16,7 @@ interface State {
 
 type Action =
     | { type: ActionType.CategoryChanged }
-    | { type: ActionType.ImageLoaded }
+    | { type: ActionType.ChangeImage }
     | { type: ActionType.ImageSelected; payload: { nextCat: CatImage } };
 
 const catImageReducer: React.Reducer<State, Action> = (state, action) => {
@@ -28,12 +28,19 @@ const catImageReducer: React.Reducer<State, Action> = (state, action) => {
             };
         }
         case ActionType.ImageSelected: {
+            if (!state.currentCat) {
+                return {
+                    ...state,
+                    currentCat: action.payload.nextCat,
+                };
+            }
+
             return {
                 ...state,
                 nextCat: action.payload.nextCat,
             };
         }
-        case ActionType.ImageLoaded: {
+        case ActionType.ChangeImage: {
             return {
                 currentCat: state.nextCat,
                 nextCat: null,
@@ -47,7 +54,6 @@ function useChangingCatImage(refreshRate: number, catCategory: number | undefine
         currentCat: null,
         nextCat: null,
     });
-    const [status] = usePreloadImage(nextCat);
     const selectNextCatDetails = useCallback(() => {
         fetchCat(catCategory).then(result =>
             dispatch({
@@ -59,6 +65,8 @@ function useChangingCatImage(refreshRate: number, catCategory: number | undefine
         );
     }, [catCategory]);
 
+    usePreloadImage(nextCat);
+
     useEffect(() => {
         selectNextCatDetails();
     }, [selectNextCatDetails]);
@@ -68,18 +76,20 @@ function useChangingCatImage(refreshRate: number, catCategory: number | undefine
     }, [catCategory]);
 
     useEffect(() => {
-        if (status === 'loaded') {
-            dispatch({ type: ActionType.ImageLoaded });
+        if (nextCat === null) {
+            selectNextCatDetails();
         }
-    }, [status]);
+    }, [nextCat, selectNextCatDetails]);
 
     useEffect(() => {
-        const timeout = setTimeout(selectNextCatDetails, refreshRate);
+        const timeout = setTimeout(() => {
+            dispatch({ type: ActionType.ChangeImage });
+        }, refreshRate);
 
         return (): void => {
             clearTimeout(timeout);
         };
-    }, [currentCat, refreshRate, selectNextCatDetails]);
+    }, [currentCat, refreshRate]);
 
     return [currentCat];
 }
